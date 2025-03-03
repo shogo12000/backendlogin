@@ -9,7 +9,7 @@ import serverless from 'serverless-http';
 const app = express();
 
 const corsOptions = {
-    origin: 'http://localhost:5174', // Permitir apenas este domínio
+    origin: '*', // Permitir apenas este domínio
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
     allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
   };
