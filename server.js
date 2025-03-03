@@ -18,4 +18,4 @@ app.use('/api/users', userRoutes);
 
 // const PORT = process.env.PORT || 5000 ;
 // app.listen(PORT, () => console.log(`✅ Servidor rodando na porta ${PORT}`));
-import serverless from 'serverless-http'; 
+export const handler = serverless(app); 
