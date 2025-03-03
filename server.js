@@ -36,4 +36,7 @@ const startServer = async () => {
 startServer();
 
 // Exportação para AWS Lambda
-export const handler = serverless(app);
+export const handler = async (event, context) => {
+    const serverlessApp = serverless(app);
+    return serverlessApp(event, context);
+  };
