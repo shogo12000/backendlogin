@@ -8,11 +8,20 @@ import serverless from 'serverless-http';
 
 const app = express();
 
+const allowedOrigins = ['http://localhost:5174', 'https://backendlogin-delta.vercel.app'];
+
 const corsOptions = {
-    origin: '*', // Permitir apenas este domínio
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
-  };
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+};
 
 const startServer = async () => {
     try {
@@ -38,3 +47,4 @@ startServer();
 
 // Exportação para AWS Lambda
 export default serverless(app);
+
