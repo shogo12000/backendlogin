@@ -4,18 +4,36 @@ import connectDB from './config/db.js';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import serverless from 'serverless-http'; 
+import serverless from 'serverless-http';
 
 const app = express();
-connectDB();  
 
-app.use(express.json());
-app.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:5174', // Permitir apenas este domínio
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
+  };
 
-// Importação das rotas
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
+const startServer = async () => {
+    try {
+        await connectDB();
 
-// const PORT = process.env.PORT || 5000 ;
-// app.listen(PORT, () => console.log(`✅ Servidor rodando na porta ${PORT}`));
-export default serverless(app); 
+        app.use(express.json());
+        app.use(cors(corsOptions));
+
+        // Importação das rotas
+        app.use('/api/auth', authRoutes);
+        app.use('/api/users', userRoutes);
+
+        console.log('✅ Servidor inicializado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao conectar ao banco:', error);
+        process.exit(1);
+    }
+};
+
+// Inicia o servidor
+startServer();
+
+// Exportação para AWS Lambda
+export const handler = serverless(app);
