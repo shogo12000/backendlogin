@@ -16,8 +16,9 @@ const corsOptions = {
 
 const startServer = async () => {
     try {
+        console.log('Tentando conectar ao banco...');
         await connectDB();
-
+        console.log('Banco de dados conectado com sucesso!');
         app.use(express.json());
         app.use(cors(corsOptions));
 
