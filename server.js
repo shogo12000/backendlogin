@@ -1,50 +1,38 @@
-import 'dotenv/config';
-import express from 'express';
-//import connectDB from './config/db.js';
-import cors from 'cors';
-import authRoutes from './routes/authRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import serverless from 'serverless-http';
+ 
+ 
+const express = require('express');
+const cors = require('cors');
+const serverless = require('serverless-http');
+ 
 
 const app = express();
 
-const corsOptions = {
-    origin:  '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: false,
-};
-
+app.use(cors());
 app.use(express.json());
-app.use(cors(corsOptions));
 
-app.get('/test', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.json({ message: 'CORS está funcionando!' });
+ 
+ 
+
+app.get('/', (req, res) => {
+    console.log("funcionando")
+ 
+    res.send('Backend funcionando no Vercel! ' );
 });
-// const startServer = async () => {
-//     try {
-//         console.log('Tentando conectar ao banco...');
-//         await connectDB();
-//         console.log('Banco de dados conectado com sucesso!');
-//         app.use(express.json());
-//         app.use(cors(corsOptions));
 
-//         // Importação das rotas
-//         app.use('/api/auth', authRoutes);
-//         app.use('/api/users', userRoutes);
+app.get('/teste', (req, res) => {
+    res.send('Teste funcionando!');
+});
 
-//         console.log('✅ Servidor inicializado com sucesso!');
+ 
+
+module.exports = app;
+module.exports.handler = serverless(app);
 
 
-//     } catch (error) {
-//         console.error('Erro ao conectar ao banco:', error);
-//         process.exit(1);
-//     }
-// };
 
-// // Inicia a conexão com o banco de dados
-// startServer();
-
-// Exporta a aplicação para Vercel (sem app.listen)
-export default serverless(app);
+if (require.main === module) {
+    const PORT = 4000; // Escolha uma porta para o servidor local
+    app.listen(PORT, () => {
+        console.log(`Servidor rodando localmente em http://localhost:${PORT}`);
+    });
+}
