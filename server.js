@@ -8,18 +8,10 @@ import serverless from 'serverless-http';
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:5174', 'https://backendlogin-delta.vercel.app'];
+ 
 
 const corsOptions = {
-    origin: function (origin, callback) {
-        console.log("teste"); 
-        console.log(origin);
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin:  '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: false,
@@ -38,15 +30,19 @@ const startServer = async () => {
         app.use('/api/users', userRoutes);
 
         console.log('✅ Servidor inicializado com sucesso!');
+
+        app.get('/test', (req, res) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.json({ message: 'CORS está funcionando!' });
+        });
     } catch (error) {
         console.error('Erro ao conectar ao banco:', error);
         process.exit(1);
     }
 };
 
-// Inicia o servidor
+// Inicia a conexão com o banco de dados
 startServer();
 
-// Exportação para AWS Lambda
+// Exporta a aplicação para Vercel (sem app.listen)
 export default serverless(app);
-
