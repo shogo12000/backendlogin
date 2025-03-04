@@ -12,6 +12,8 @@ const allowedOrigins = ['http://localhost:5174', 'https://backendlogin-delta.ver
 
 const corsOptions = {
     origin: function (origin, callback) {
+        console.log("teste"); 
+        console.log(origin);
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
