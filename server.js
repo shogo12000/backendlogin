@@ -1,38 +1,23 @@
- 
- 
-const express = require('express');
-const cors = require('cors');
-const serverless = require('serverless-http');
- 
+
+import 'dotenv/config';
+import express from 'express';
+import connectDB from './config/db.js';
+import cors from 'cors';
+import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import serverless from 'serverless-http'; 
 
 const app = express();
+connectDB();  
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
- 
- 
+// Importação das rotas
+// app.use('/api/auth', authRoutes);
+// app.use('/api/users', userRoutes);
 
-app.get('/', (req, res) => {
-    console.log("funcionando")
- 
-    res.send('Backend funcionando no Vercel! ' );
-});
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`✅ Servidor rodando na porta ${PORT}`));
 
-app.get('/teste', (req, res) => {
-    res.send('Teste funcionando!');
-});
-
- 
-
-module.exports = app;
-module.exports.handler = serverless(app);
-
-
-
-if (require.main === module) {
-    const PORT = 4000; // Escolha uma porta para o servidor local
-    app.listen(PORT, () => {
-        console.log(`Servidor rodando localmente em http://localhost:${PORT}`);
-    });
-}
+export default serverless(app)
