@@ -13,6 +13,10 @@ connectDB();
 app.use(express.json());
 app.use(cors());
 
+app.get('/api/test', (req,res)=>{
+    res.json({message: 'API FUNCIONANDO'})
+})
+
 // Importação das rotas
 // app.use('/api/auth', authRoutes);
 // app.use('/api/users', userRoutes);
